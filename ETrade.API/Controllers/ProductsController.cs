@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ETrade.API.Controllers
 {
 	[ApiController]
-	[Route("/api/[controller]")]
+	[Route("api/[controller]")]
 	public class ProductsController : ControllerBase
 	{
 		private readonly StoreContext _context;
@@ -23,6 +23,14 @@ namespace ETrade.API.Controllers
             var products = await _context.Products.ToListAsync();
 
             return Ok(products);
+        }
+
+        [HttpGet("{productId}")]
+        public async Task<ActionResult<Product>> GetProduct(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+
+            return Ok(product);
         }
 
 
