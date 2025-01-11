@@ -2,11 +2,13 @@
 import "./App.css";
 import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import Header from "../feature/catalog/Header";
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false)
+  const {darkMode} = useSelector((state:RootState) => state.ui)
+
   const paletteType = darkMode ? "dark" : "light";
 
   const theme = createTheme({
@@ -18,15 +20,11 @@ function App() {
     }
   })
 
-  const handleThemeChange = () => {
-    setDarkMode(!darkMode)
-  }
-
   return (
     <Container maxWidth="xl">
     <ThemeProvider theme={theme}>
     <CssBaseline/>
-      <Header darkMode={darkMode} handleThemeChange={handleThemeChange}/>
+      <Header/>
       <Container sx={{mt: 14}}>
         <Outlet />
       </Container>

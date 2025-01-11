@@ -2,16 +2,19 @@ import {
   AppBar,
   Badge,
   IconButton,
+  LinearProgress,
   List,
   ListItem,
   Toolbar,
   Typography,
 } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import React from "react";
 import { NavLink } from "react-router-dom";
 import { Box } from "@mui/system";
 import { DarkMode, LightMode } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { setDarkMode } from "../../layout/uiSlice";
 
 const midLinks = [
   { title: "catalog", path: "/catalog" },
@@ -36,11 +39,12 @@ const navStyles = {
   },
 };
 
-interface Props {
-  darkMode: boolean;
-  handleThemeChange: () => void;
-}
-export default function Header({ darkMode, handleThemeChange }: Props) {
+
+export default function Header() {
+
+  const {isLoading,darkMode} = useSelector((state:RootState) => state.ui)
+  const dispatch = useDispatch();
+
   return (
     <AppBar position="fixed" sx={{ mb: 5 }}>
       <Toolbar
@@ -55,7 +59,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
              MShop
           </Typography>
 
-          <IconButton onClick={handleThemeChange}>
+          <IconButton onClick={() => dispatch(setDarkMode())}>
             {darkMode ? <DarkMode /> : <LightMode sx={{ color: "yellow" }} />}
           </IconButton>
         </Box>
@@ -89,6 +93,11 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
           </List>
         </Box>
       </Toolbar>
+      {isLoading && (
+        <Box sx={{width: "100%"}}>
+          <LinearProgress color="secondary"/>
+        </Box>
+      )}
     </AppBar>
   );
 }
