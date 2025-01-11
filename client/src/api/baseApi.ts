@@ -1,5 +1,6 @@
 import { BaseQueryApi, FetchArgs, fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { startLoading, stopLoading } from "../layout/uiSlice";
+import { toast } from "react-toastify";
 
 const customBaseQuery = fetchBaseQuery({
     baseUrl: "https://localhost:5001/api"
@@ -16,6 +17,17 @@ export const baseQueryWithErrorHandling = async (args: string | FetchArgs, api: 
     if(result.error){
         const {status, data } = result.error;
         console.log({status,data})
+
+        switch (status) {
+            case 400:
+                toast.error(data as string)
+                break;
+            case 401:
+                toast.error(data as string)
+                break
+            default:
+                break;
+        }
     }
 
     return result
