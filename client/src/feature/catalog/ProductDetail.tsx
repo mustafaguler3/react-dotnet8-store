@@ -10,28 +10,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams } from "react-router-dom";
-import { Product } from "../../models/Product";
+import { useFetchProductDetailsQuery } from "./catalogApi";
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch(`https://localhost:5001/api/products/${id}`)
-      .then((response) => response.json())
-      .then((data) => setProduct(data))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
-  }, [id]);
+  const {data: product, isLoading} = useFetchProductDetailsQuery(id ? +id : 0)
 
-  if (loading) {
-    return <h1>Loading...</h1>;
-  }
-
-  if (!product) {
+  if (!product || isLoading) {
     return <h1>Loading...</h1>;
   }
 
